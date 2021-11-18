@@ -24,7 +24,7 @@ nch_d = 64
 n_epoch = 10000
 lr = 0.001
 beta1 = 0.5
-outf = './result_lsgan'
+outf = '../../result/EXP3_cars_text2image/result_lsgan'
 display_interval = 100
 save_fake_image_interval = 1500
 plt.rcParams['figure.figsize'] = 10, 6
@@ -170,7 +170,7 @@ def main():
                               transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
                           ])
 
-    dataset = ImageFolder.ImageDataset("../data/cars/confirmed_fronts/", transform)
+    dataset = ImageFolder.ImageDataset("../../data/cars/confirmed_fronts/", transform)
 
     dataloader = DataLoader(dataset, batch_size=64, shuffle=True, num_workers=1)
     l1_coef = 50
