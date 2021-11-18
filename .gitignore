@@ -1,3 +1,5 @@
 *.png
 *.jpg
 *.jpeg
+
+!/result/EXP1_random_ads/image_pre/*.png

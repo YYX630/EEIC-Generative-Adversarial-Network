@@ -87,7 +87,7 @@ python3 GAN_random_gen.py
 ---
 
 
-** 学習の実行/モデルの生成**
+### 学習の実行/モデルの生成
 
 ```=python
 cd /src/EXP2_ads_text2image
@@ -96,7 +96,7 @@ python3
 これによって、result/EXP2_ads_text2image/imageに学習過程で生成された画像が、result/EXP2_ads_text2image/modelにモデルが出力される。
 
 
-** モデルを使用して、テキストから画像を生成**
+### モデルを使用して、テキストから画像を生成
 
 ```=python
 cd /src/EXP2_ads_text2image
@@ -112,7 +112,7 @@ python3
 
 ---
 
-** 学習の実行/モデルの生成**
+### 学習の実行/モデルの生成
 
 ```=python
 cd /src/EXP3_cars_text2image
@@ -122,7 +122,7 @@ python3 GAN_text2image_cars.py
 
 
 
-** モデルを使用して、テキストから画像を生成**
+### モデルを使用して、テキストから画像を生成**
 
 ```=python
 cd /src/EXP3_cars_text2image
@@ -131,5 +131,3 @@ python3 GAN_text2image_test_cars.py
 
 3単語の入力を求められる。必ず3単語の英語を入力する。例えば、"black blue red" や、 "sky apple banana"など。
 テキストから生成された画像はresult/EXP3_cars_text2image/outputに置かれる。
-
-# GAN-project
