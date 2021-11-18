@@ -119,7 +119,7 @@ python3 GAN_text2image_cars.py
 
 
 
-### モデルを使用して、テキストから画像を生成**
+### モデルを使用して、テキストから画像を生成
 
 ```=python
 cd /src/EXP3_cars_text2image
