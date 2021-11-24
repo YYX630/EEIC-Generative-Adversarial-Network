@@ -134,7 +134,7 @@ python3
 cd /src/EXP3_cars_text2image
 python3 GAN_text2image_cars.py
 ```
-これによって、result/EXP3_cars_text2image/imageに学習過程で生成さらた画像が、result/EXP3_cars_text2image/modelにモデルが出力される。
+これによって、result/EXP3_cars_text2image/imageに学習過程で生成された画像が、result/EXP3_cars_text2image/modelにモデルが出力される。
 
 
 
