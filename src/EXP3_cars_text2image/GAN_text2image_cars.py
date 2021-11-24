@@ -159,9 +159,6 @@ def smooth_label(tensor, offset):
         return tensor + offset
  
 def main():
-        #パスには入っている画像データセットの一個上の改装を
-    #例:もし  your_home/Face_Datasets/Japanese/000.jpgのような階層になっていれば
-    #root = your_home/Face_Datasetsとする
     transform=transforms.Compose([
                               transforms.RandomResizedCrop(64, scale=(1.0, 1.0), ratio=(1., 1.)),
                               transforms.RandomHorizontalFlip(),
