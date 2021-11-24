@@ -70,6 +70,9 @@ python3 finetune.py
 ```
 上記を実行すると、data/cars/color/colorhexa_com.csvに色名とRGB値がセットになったデータがあるので、これを使いBERTの学習済みモデルに対してファインチューニングを行う。
 ファインチューニングされたモデルはdata/cars/transformersに保存される。
+色のデータセットについては以下を参照してください。
+
+https://data.world/dilumr/color-names
 
 #### 3. annotationから画像ごとの特徴量抽出
 ```
@@ -117,6 +120,7 @@ python3
 3単語の入力を求められる。必ず3単語の英語を入力する。
 テキストから生成された画像はresult/EXP2_ads_text2image/outputに置かれる。
 
+*result/EXP2_ads_text2image/output_preには、こちらで実行した結果が置かれている。*
 
 ---
 
@@ -141,5 +145,7 @@ cd /src/EXP3_cars_text2image
 python3 GAN_text2image_test_cars.py
 ```
 
-3単語の入力を求められる。必ず3単語の英語を入力する。例えば、"black blue red" や、 "sky apple banana"など。
+3単語の入力を求められる。必ず3単語の英語を入力する。例えば、"black blue red" や、 "sky apple chocolate"など。
 テキストから生成された画像はresult/EXP3_cars_text2image/outputに置かれる。
+
+*result/EXP2_ads_text2image/output_preには、こちらで実行した結果が置かれている。*
