@@ -46,8 +46,13 @@ python3 make_image_list.py
 
 #### 4. annotaitonから画像ごとの特徴量抽出
 
+```
+cd data/ads
+python3 make_sentence_vectors.py
+```
 
-
+上記を実行すると、data/ads/image/0/xxx.txtのようにxxx.pngに対応したtxtファイルが作成される。このxxx.txtファイルにはdata/ads/annotation/QA_Action.json, data/ads/annotation/QA_Reason.jsonからxxx.pngに対応しているテキストを抽出し、 ベクトルに変換したものが保存されている。
+また、ベクトルの変換にはBERTの学習済みモデルを使用した。
 
 
 ### 車データセット
@@ -58,10 +63,20 @@ python3 make_image_list.py
 
 上記からダウンロードしたzipをdata/carsフォルダに解凍すると、confirmed_frontsというフォルダができ、中には車種や年代で分類された車のフロント画像が入っている。つまり。data/cars/confirmed_frontsのように配置する。
 
-#### 2. annotationから画像ごとの特徴量抽出
+#### 2.ファインチューニング
+```
+cd data/cars
+python3 finetune.py
+```
+上記を実行すると、data/cars/color/colorhexa_com.csvに色名とRGB値がセットになったデータがあるので、これを使いBERTの学習済みモデルに対してファインチューニングを行う。
+ファインチューニングされたモデルはdata/cars/transformersに保存される。
 
-
-
+#### 3. annotationから画像ごとの特徴量抽出
+```
+cd data/cars
+python3 make_sentence_vectors.py
+```
+上記を実行すると、data/ads/confirmed_fronts内にあるxxx.pngに対応したxxx.txtファイルが作成され、xxx.pngと同じディレクトリに配置される。このxxx.txtファイルにはxxx.pngの車の色名を抽出し、 ベクトルに変換したものが保存されている。
 
 ----
 
