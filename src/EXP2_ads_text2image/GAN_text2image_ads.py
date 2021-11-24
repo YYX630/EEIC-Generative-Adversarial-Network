@@ -129,10 +129,6 @@ class Discriminator(nn.Module):
                 nn.BatchNorm2d(nch_d*8),
                 nn.LeakyReLU(negative_slope=0.2)
             )  # (256, 8, 8) -> (512, 4, 4)
-            #  'layer4':nn.Sequential( nn.Conv2d(nch_d * 8, 1, 4, 1, 0)
-            #  # (512, 4, 4) -> (1, 1, 1)
-            #  #勾配消失を防ぐためにSigmoidは使わない
-            #  )
         })
         self.projection = nn.Sequential(
             nn.Linear(in_features=self.embed_dim, out_features=self.projected_embed_dim),
@@ -159,9 +155,6 @@ def smooth_label(tensor, offset):
         return tensor + offset
  
 def main():
-        #パスには入っている画像データセットの一個上の改装を
-    #例:もし  your_home/Face_Datasets/Japanese/000.jpgのような階層になっていれば
-    #root = your_home/Face_Datasetsとする
     transform=transforms.Compose([
                               transforms.RandomResizedCrop(64, scale=(1.0, 1.0), ratio=(1., 1.)),
                               transforms.RandomHorizontalFlip(),
@@ -182,15 +175,11 @@ def main():
     netG = Generator(nz=nz, nch_g=nch_g).to(device)
     #ネットワークパラメ-タを初期化
     netG.apply(weights_init)
-    # netG.load_state_dict(torch.load('../result/199gen_028.pth'))
     #Discriminatorを定義
     netD = Discriminator(nch_d=nch_d).to(device)
-    
     #ネットワークパラメ-タを初期化
     netD.apply(weights_init)
-    # netD.load_state_dict(torch.load('../result/199disc_028.pth'))    
-    #損失関数を二乗誤差に設定
-    # criterion = nn.MSELoss()
+    #損失関数を設定
     criterion = nn.BCELoss()
     l2_loss = nn.MSELoss()
     l1_loss = nn.L1Loss()  
@@ -202,7 +191,7 @@ def main():
     Loss_D_list, Loss_G_list = [], []
     
     fixed_noise = torch.randn(64, nz, 1, 1, device=device)  # save_fake_image用ノイズ（固定）
-    for epoch in range(0, n_epoch):
+    for epoch in range(26, n_epoch):
         for itr, data in enumerate(dataloader):
             real_image = data[0].to(device)   # 本物画像
             embed = data[1].to(device)
@@ -214,12 +203,10 @@ def main():
 
             #---------  Update Discriminaator   ----------
             netD.zero_grad() # 勾配の初期化
-            # fake_image = netG(input) # Generatorから得られた偽画像
             output, activation_real = netD(real_image, embed)   # Discriminatorが行った、本物画像の判定結果
             errD_real = criterion(output, real_target)  # 本物画像の判定結果と本物ラベルとの二乗誤差
             D_x = output.mean().item()  # outputの平均 D_x を計算（後でログ出力に使用）
-            real_score = output
-
+            
             fake_image = netG(embed, noise)
             output, _ = netD(fake_image.detach(), embed)  # Discriminatorが行った、偽物画像の判定結果
             
@@ -229,10 +216,8 @@ def main():
             errD =  errD_real + errD_fake    # Discriminator 全体の損失
             errD.backward()    # 誤差逆伝播
             optimizerD.step()   # Discriminatoeのパラメーター更新
-            fake_score = output
-    
-            #Generator→Discriminatorの順にパラメータ更新
-
+            
+           
             #---------  Update Generator   ----------
             
             netG.zero_grad()
@@ -268,19 +253,6 @@ def main():
                                   normalize=True, nrow=8)
                 torch.save(netD.state_dict(), '../../result/EXP2_ads_text2image/model/{:03d}disc_{:03d}.pth'.format(itr, epoch + 1))
                 torch.save(netG.state_dict(), '../../result/EXP2_ads_text2image/model/{:03d}gen_{:03d}.pth'.format(itr, epoch + 1))
-			 
-        
- 
-    # plot graph
-    plt.figure()    
-    plt.plot(range(len(Loss_D_list)), Loss_D_list, color='blue', linestyle='-', label='Loss_D')
-    plt.plot(range(len(Loss_G_list)), Loss_G_list, color='red', linestyle='-', label='Loss_G')
-    plt.legend()
-    plt.xlabel('iter (*100)')
-    plt.ylabel('loss')
-    plt.title('Loss_D and Loss_G')
-    plt.grid()
-    plt.savefig('Loss_graph.png')    
 
 if __name__ == '__main__':
     main()

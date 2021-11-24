@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import copy
 from collections import OrderedDict
 from torch.utils.data import DataLoader
-from torch.autograd import Variable
-from transformers import BertTokenizer, BertModel
+from sentence_transformers import SentenceTransformer, InputExample, losses
+from torch.utils.data import DataLoader
 
 sample_size = 64
 nz = 100
@@ -66,54 +66,38 @@ class Generator(nn.Module):
         for layer in self.layers.values(): 
             z = layer(z)
         return z
- 
+
+
 def main():
     cnt = 0
-    while True:
-        text = input("text>")
-        marked_text = "[CLS] " + text + ". [SEP]"
-        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-        model = BertModel.from_pretrained('bert-base-uncased',
-                        output_hidden_states = True, # Whether the model returns all hidden-states.
-                        )
-        tokenized_text = tokenizer.tokenize(marked_text)
-        # print(tokenized_text)
-        indexed_tokens = tokenizer.convert_tokens_to_ids(tokenized_text)
-        inputs = tokenizer(text, return_tensors="pt")
-        flag = False
-        segments_ids = []
-        for i in tokenized_text:
-            if flag:
-                segments_ids.append(1)
-            else:
-                segments_ids.append(0)
-            if i == "[SEP]":
-                flag = True
-        tokens_tensor = torch.tensor([indexed_tokens])
-        segments_tensors = torch.tensor([segments_ids])
-        with torch.no_grad():
-            outputs = model(tokens_tensor, segments_tensors)
-            hidden_states = outputs[2]
-        token_vecs = hidden_states[-2][0]
-        sentence_embedding = torch.mean(token_vecs, dim=0)
-
-        #GPUがあるならGPUデバイスを作動
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        
-        #Generatorを定義
-        netG = Generator(nz=nz, nch_g=nch_g).to(device)
-        #ネットワークパラメ-タを初期化
-        # netG.apply(weights_init)
-        netG.load_state_dict(torch.load('../../result/EXP3_cars_text2image/model/999gen_008.pth', map_location=torch.device('cpu')))
-        sentence_embedding = torch.reshape(sentence_embedding, (1, 768)).to(device)
-        embed = sentence_embedding.clone()
-        for i in range(sample_size - 1):
-            embed = torch.cat((embed, sentence_embedding), 0)
-        print(embed.size())
-        noise = torch.randn(sample_size, nz, 1, 1, device=device)   # 入力ベクトル生成（正規分布ノイズ)
-        image = netG(embed, noise)
-        vutils.save_image(image.detach(), '../../result/EXP3_cars_text2image/output/output_{:03d}.png'.format(cnt), normalize=True, nrow=8)
-        cnt += 1
-    
+    model = SentenceTransformer("../../data/cars/transformers/")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    noise = torch.randn(sample_size, nz, 1, 1, device=device)   # 入力ベクトル生成（正規分布ノイズ)
+    #Generatorを定義
+    netG = Generator(nz=nz, nch_g=nch_g).to(device)
+    #ネットワークパラメ-タを初期化
+    netG.load_state_dict(torch.load('../../result/EXP3_cars_text2image/model/899gen_006.pth', map_location=torch.device(device)))
+    with torch.no_grad():
+        while True:
+            #空白区切りで色を3つ入力
+            text = input("3 colors>")
+            tmp = text.split(" ")
+            embed = model.encode(tmp[0])
+            embed = torch.tensor(embed)
+            embed = torch.reshape(embed, (1, 768)).to(device)
+            for i in range(sample_size - 1):
+                if i < 23:                
+                    sentence_embedding = model.encode(tmp[0])
+                elif i > 38:
+                    sentence_embedding = model.encode(tmp[2])
+                else:
+                    sentence_embedding = model.encode(tmp[1])
+                sentence_embedding = torch.tensor(sentence_embedding)
+                sentence_embedding = torch.reshape(sentence_embedding, (1, 768)).to(device)
+                embed = torch.cat((embed, sentence_embedding), 0)
+            netG.zero_grad()
+            image = netG(embed, noise)
+            vutils.save_image(image.detach(), '../../result/EXP3_cars_text2image/output/output_{:03d}.png'.format(cnt), normalize=True, nrow=8)
+            cnt += 1
 if __name__ == '__main__':
     main()

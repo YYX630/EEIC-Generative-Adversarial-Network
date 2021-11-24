@@ -182,15 +182,12 @@ def main():
     netG = Generator(nz=nz, nch_g=nch_g).to(device)
     #ネットワークパラメ-タを初期化
     netG.apply(weights_init)
-    # netG.load_state_dict(torch.load('../result/199gen_028.pth'))
     #Discriminatorを定義
     netD = Discriminator(nch_d=nch_d).to(device)
     
     #ネットワークパラメ-タを初期化
     netD.apply(weights_init)
-    # netD.load_state_dict(torch.load('../result/199disc_028.pth'))    
-    #損失関数を二乗誤差に設定
-    # criterion = nn.MSELoss()
+    #損失関数を設定
     criterion = nn.BCELoss()
     l2_loss = nn.MSELoss()
     l1_loss = nn.L1Loss()  
@@ -230,9 +227,6 @@ def main():
             errD.backward()    # 誤差逆伝播
             optimizerD.step()   # Discriminatoeのパラメーター更新
             fake_score = output
-    
-            #Generator→Discriminatorの順にパラメータ更新
-
             #---------  Update Generator   ----------
             
             netG.zero_grad()
@@ -269,18 +263,6 @@ def main():
                 torch.save(netD.state_dict(), '../../result/EXP3_cars_text2image/model/{:03d}disc_{:03d}.pth'.format(itr, epoch + 1))
                 torch.save(netG.state_dict(), '../../result/EXP3_cars_text2image/model/{:03d}gen_{:03d}.pth'.format(itr, epoch + 1))
 			 
-        
- 
-    # plot graph
-    plt.figure()    
-    plt.plot(range(len(Loss_D_list)), Loss_D_list, color='blue', linestyle='-', label='Loss_D')
-    plt.plot(range(len(Loss_G_list)), Loss_G_list, color='red', linestyle='-', label='Loss_G')
-    plt.legend()
-    plt.xlabel('iter (*100)')
-    plt.ylabel('loss')
-    plt.title('Loss_D and Loss_G')
-    plt.grid()
-    plt.savefig('Loss_graph.png')    
 
 if __name__ == '__main__':
     main()
