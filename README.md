@@ -106,7 +106,7 @@ python3 GAN_random_gen.py
 
 ```=python
 cd /src/EXP2_ads_text2image
-python3 
+python3 GAN_text2image_ads.py
 ```
 これによって、result/EXP2_ads_text2image/imageに学習過程で生成された画像が、result/EXP2_ads_text2image/modelにモデルが出力される。
 
@@ -115,7 +115,7 @@ python3
 
 ```=python
 cd /src/EXP2_ads_text2image
-python3 
+python3 GAN_text2image_test_ads.py
 ```
 広告画像に関する3つの文章の入力を求められる。入力については下の例やdata/ads/annotation/QA_Action.json, data/ads/annotation/QA_Reasonを参照してください。  
 例:  
