@@ -77,11 +77,13 @@ def main():
     netG = Generator(nz=nz, nch_g=nch_g).to(device)
     #ネットワークパラメ-タを初期化
     netG.load_state_dict(torch.load('../../result/EXP2_ads_text2image/model/099gen_032.pth', map_location=torch.device(device)))
+       
     with torch.no_grad():
         while True:
-            #空白区切りで色を3つ入力
-            text = input("3 words>")
-            tmp = text.split(" ")
+            print("please input 3 sentences")
+            tmp = []
+            for i in range(0, 3):
+                tmp.append(input(">"))
             embed = model.encode(tmp[0])
             embed = torch.tensor(embed)
             embed = torch.reshape(embed, (1, 768)).to(device)
