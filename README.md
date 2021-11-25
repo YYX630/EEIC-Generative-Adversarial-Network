@@ -117,10 +117,15 @@ python3
 cd /src/EXP2_ads_text2image
 python3 
 ```
-3単語の入力を求められる。必ず3単語の英語を入力する。
+広告画像に関する3つの文章の入力を求められる。入力については下の例やdata/ads/annotation/QA_Action.json, data/ads/annotation/QA_Reasonを参照してください。  
+例:  
+　'>I should buy a car. Because it is cool.'  
+　'>I should buy a phone. Because it is useful.'  
+　'>I should drink soda. Because it has a good taste.'  
 テキストから生成された画像はresult/EXP2_ads_text2image/outputに置かれる。
-
-*result/EXP2_ads_text2image/output_preには、こちらで実行した結果が置かれている。*
+出力画像は8x8枚の画像からなり、最初の入力が上3行、その次の入力が中2行、最後の入力が下3行の画像に対応している。
+出力画像は
+*result/EXP2_ads_text2image/output_preには、こちらで実行した結果が置かれており、入力は上の例である。*  
 
 ---
 
@@ -145,7 +150,7 @@ cd /src/EXP3_cars_text2image
 python3 GAN_text2image_test_cars.py
 ```
 
-3単語の入力を求められる。必ず3単語の英語を入力する。例えば、"black blue red" や、 "sky apple chocolate"など。
+3単語の入力を求められる。必ず3単語の英語を入力する。例えば、"red blue black" や、 "apple sky chocolate"など。
 テキストから生成された画像はresult/EXP3_cars_text2image/outputに置かれる。
-
+実験2と同様で出力画像は8x8枚の画像からなり、最初の入力が上3行、その次の入力が中2行、最後の入力が下3行の画像に対応している。 
 *result/EXP2_ads_text2image/output_preには、こちらで実行した結果が置かれている。*
