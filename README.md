@@ -91,7 +91,7 @@ python3 make_sentence_vectors.py
 cd /src/EXP1_random_ads
 python3 GAN_random_gen.py
 ```
-上記を実行すろと、result/EXP1_random_ads/image内にランダム生成された画像が学習が経過する一定間隔で出力される。
+上記を実行すると、result/EXP1_random_ads/image内にランダム生成された画像が学習が経過する一定間隔で出力される。
 
 *result/EXP1_random_ads/image_preには、こちらで実行した結果が置かれている。*
 
